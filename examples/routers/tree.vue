@@ -212,10 +212,12 @@
                 data1: [
                     {
                         title: 'parent 1',
+                        icon:'ios-home',
                         expand: true,
                         children: [
                             {
                                 title: 'parent 1-1',
+                                icon:'ios-home-outline',
                                 expand: true,
                                 children: [
                                     {
@@ -228,6 +230,7 @@
                             },
                             {
                                 title: 'parent 1-2',
+                                icon:'ios-person',
                                 expand: true,
                                 children: [
                                     {
