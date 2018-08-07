@@ -133,11 +133,21 @@
                 return this.data[this.childrenKey];
             }
         },
+        watch:{
+            'data.expand'(b){
+                if(b){
+                    this.asynLoad();
+                }
+            }
+        },
+        mounted(){
+            if(this.data.expand){
+                this.asynLoad();
+            }
+        },
         methods: {
-            handleExpand () {
+            asynLoad(cb){
                 const item = this.data;
-                if (item.disabled) return;
-
                 // async loading
                 if (item[this.childrenKey].length === 0) {
                     const tree = findComponentUpward(this, 'Tree');
@@ -147,17 +157,23 @@
                             this.$set(this.data, 'loading', false);
                             if (children.length) {
                                 this.$set(this.data, this.childrenKey, children);
-                                this.$nextTick(() => this.handleExpand());
+                                cb&&cb();
                             }
                         });
                         return;
                     }
                 }
-
-                if (item[this.childrenKey] && item[this.childrenKey].length) {
-                    this.$set(this.data, 'expand', !this.data.expand);
-                    this.dispatch('Tree', 'toggle-expand', this.data);
-                }
+                cb&&cb();
+            },
+            handleExpand () {
+                const item = this.data;
+                if (item.disabled) return;
+                this.asynLoad(()=>{
+                    if (item[this.childrenKey] && item[this.childrenKey].length) {
+                        this.$set(this.data, 'expand', !this.data.expand);
+                        this.dispatch('Tree', 'toggle-expand', this.data);
+                    }
+                })
             },
             handleSelect () {
                 if (this.data.disabled) return;

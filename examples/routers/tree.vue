@@ -202,7 +202,7 @@
 <template>
     <div>
         {{ data1 }}
-        <Tree :data="data1"></Tree>
+        <Tree :data="data1" @on-select-change="handleSelected" :load-data="loadData"></Tree>
     </div>
 </template>
 <script>
@@ -213,20 +213,14 @@
                     {
                         title: 'parent 1',
                         icon:'ios-home',
-                        expand: true,
+                        expand:true,
                         children: [
                             {
                                 title: 'parent 1-1',
                                 icon:'ios-home-outline',
-                                expand: true,
-                                children: [
-                                    {
-                                        title: 'leaf 1-1-1'
-                                    },
-                                    {
-                                        title: 'leaf 1-1-2'
-                                    }
-                                ]
+                                loading:false,
+                                expand:true,
+                                children: []
                             },
                             {
                                 title: 'parent 1-2',
@@ -244,6 +238,32 @@
                         ]
                     }
                 ]
+            }
+        },
+        methods: {
+            handleSelected(ns){
+                let n = ns.length>0?ns[0]:null;
+                if(n){
+                    this.$set(n, 'expand', true);
+                }
+            },
+            loadData (item, callback) {
+                console.info(item);
+                setTimeout(() => {
+                    const data = [
+                        {
+                            title: 'children',
+                            loading: false,
+                            children: []
+                        },
+                        {
+                            title: 'children',
+                            loading: false,
+                            children: []
+                        }
+                    ];
+                    callback(data);
+                }, 200);
             }
         }
     }
